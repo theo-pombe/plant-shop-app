@@ -1,16 +1,7 @@
-# 🚀 React Native Starter Template
+🌱 Plant Shop App
 
-A starter template to kickstart your React Native mobile app using **Expo**, **TailwindCSS** (via [NativeWind](https://www.nativewind.dev/)), and **Expo Router** for navigation. It includes a basic structure and pre-built screens to help you get started quickly.
+✅ Project Overview
 
-## ✨ Features
+A mobile e-commerce application designed for users to browse, search, and purchase indoor/outdoor plants. It includes account registration, product browsing, cart management, and checkout functionality.
 
-- ✅ Built with [Expo](https://expo.dev/)
-- ✅ Routing powered by [Expo Router](https://expo.github.io/router/)
-- ✅ Utility-first styling with [TailwindCSS](https://tailwindcss.com/) via [NativeWind](https://www.nativewind.dev/)
-- ✅ Predefined screens:
-  - Onboarding
-  - Login
-  - Signup
-  - Tab navigation:
-    - Home
-    - Profile
+---
