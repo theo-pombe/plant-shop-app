@@ -18,8 +18,6 @@ Make sure you have the following installed:
 - **npm** or **yarn**
 - **Git** (optional, for version control)
 
----
-
 ### 🚀 **Installation**
 
 Clone the repository and install dependencies:
@@ -32,8 +30,6 @@ npm install
 yarn install
 ```
 
----
-
 ### 💻 **Run the App Locally**
 
 Start the development server:
@@ -41,3 +37,5 @@ Start the development server:
 ```bash
 npx expo start
 ```
+
+---
