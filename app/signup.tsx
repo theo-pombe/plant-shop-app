@@ -1,4 +1,5 @@
 import FormButton from "@/components/FormButton";
+import SkipButton from "@/components/SkipButton";
 import { useAuth } from "@/context/auth/authContext";
 import { isValidEmail } from "@/utils/validators";
 import { AntDesign, FontAwesome } from "@expo/vector-icons"; // For Google
@@ -20,11 +21,9 @@ export default function SignupScreen() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [passwordVisible, setPasswordVisible] = useState(false);
-  const router = useRouter();
-
-  const { signup } = useAuth();
-
   const [loading, setLoading] = useState(false);
+  const router = useRouter();
+  const { signup } = useAuth();
 
   const handleSignUp = async () => {
     if (!name || !email || !password) {
@@ -45,6 +44,8 @@ export default function SignupScreen() {
 
   return (
     <SafeAreaView className="flex-1 justify-center gap-y-16 bg-white px-8">
+      <SkipButton />
+
       {/* Header */}
       <View className="justify-center items-center gap-y-1">
         <Text className="text-xl font-semibold">
