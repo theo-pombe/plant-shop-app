@@ -1,8 +1,9 @@
-import { auth } from "@/FirebaseConfig";
+import FormButton from "@/components/FormButton";
+import { useAuth } from "@/context/auth/authContext";
+import { isValidEmail } from "@/utils/validators";
 import { AntDesign, FontAwesome } from "@expo/vector-icons"; // For Google
 import Ionicons from "@expo/vector-icons/Ionicons";
 import { Link, useRouter } from "expo-router";
-import { signInWithEmailAndPassword } from "firebase/auth";
 import { useState } from "react";
 import {
   Alert,
@@ -19,9 +20,8 @@ export default function LoginScreen() {
   const [password, setPassword] = useState("");
   const [passwordVisible, setPasswordVisible] = useState(false);
   const router = useRouter();
-
-  const isValidEmail = (email: string) =>
-    /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
+  const { login } = useAuth();
+  const [loading, setLoading] = useState(false);
 
   const handleLogin = async () => {
     if (!email || !password) {
@@ -30,10 +30,13 @@ export default function LoginScreen() {
     }
 
     try {
-      await signInWithEmailAndPassword(auth, email, password);
+      setLoading(true);
+      await login(email, password);
       router.replace("/(tabs)/home");
     } catch (error: any) {
-      Alert.alert("Signup error", error.message);
+      Alert.alert("Login Error", error.message);
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -95,16 +98,10 @@ export default function LoginScreen() {
           </Text>
         </TouchableOpacity>
 
-        <TouchableOpacity
-          onPress={handleLogin}
-          className="py-4 rounded-2xl bg-rose-400 mt-6"
-        >
-          <Text className="text-center text-white font-semibold text-base">
-            Log In
-          </Text>
-        </TouchableOpacity>
+        <FormButton title="Log In" onPress={handleLogin} loading={loading} />
       </View>
 
+      {/* Social Sign Up */}
       <View className="gap-y-4">
         <View className="flex-row items-center mb-4">
           <View className="flex-1 h-px bg-slate-300" />

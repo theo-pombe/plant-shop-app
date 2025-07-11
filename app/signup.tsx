@@ -1,8 +1,9 @@
-import { auth } from "@/FirebaseConfig";
+import FormButton from "@/components/FormButton";
+import { useAuth } from "@/context/auth/authContext";
+import { isValidEmail } from "@/utils/validators";
 import { AntDesign, FontAwesome } from "@expo/vector-icons"; // For Google
 import Ionicons from "@expo/vector-icons/Ionicons";
 import { Link, useRouter } from "expo-router";
-import { createUserWithEmailAndPassword, updateProfile } from "firebase/auth";
 import { useState } from "react";
 import {
   Alert,
@@ -21,8 +22,9 @@ export default function SignupScreen() {
   const [passwordVisible, setPasswordVisible] = useState(false);
   const router = useRouter();
 
-  const isValidEmail = (email: string) =>
-    /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
+  const { signup } = useAuth();
+
+  const [loading, setLoading] = useState(false);
 
   const handleSignUp = async () => {
     if (!name || !email || !password) {
@@ -31,19 +33,13 @@ export default function SignupScreen() {
     }
 
     try {
-      const userCredentials = await createUserWithEmailAndPassword(
-        auth,
-        email,
-        password
-      );
-
-      await updateProfile(userCredentials.user, {
-        displayName: name,
-      });
-
+      setLoading(true);
+      await signup(name, email, password);
       router.replace("/(tabs)/home");
     } catch (error: any) {
-      Alert.alert("Signup error", error.message);
+      Alert.alert("Signup Error", error.message);
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -110,14 +106,7 @@ export default function SignupScreen() {
           </Pressable>
         </View>
 
-        <TouchableOpacity
-          onPress={handleSignUp}
-          className="py-4 rounded-2xl bg-rose-400 mt-6"
-        >
-          <Text className="text-center text-white font-semibold text-base">
-            Sign Up
-          </Text>
-        </TouchableOpacity>
+        <FormButton title="Sign Up" onPress={handleSignUp} loading={loading} />
       </View>
 
       {/* Social Sign Up */}
