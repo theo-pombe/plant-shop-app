@@ -1,4 +1,9 @@
-import { Link } from "expo-router";
+import { auth } from "@/FirebaseConfig";
+import { AntDesign, FontAwesome } from "@expo/vector-icons"; // For Google
+import Ionicons from "@expo/vector-icons/Ionicons";
+import { Link, useRouter } from "expo-router";
+import { signInWithEmailAndPassword } from "firebase/auth";
+import { useState } from "react";
 import {
   Alert,
   Pressable,
@@ -8,11 +13,6 @@ import {
   View,
 } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
-import Ionicons from "@expo/vector-icons/Ionicons";
-import { AntDesign } from "@expo/vector-icons"; // For Google
-import { FontAwesome } from "@expo/vector-icons"; // For Apple
-import { useState } from "react";
-import { useRouter } from "expo-router";
 
 export default function LoginScreen() {
   const [email, setEmail] = useState("");
@@ -23,21 +23,18 @@ export default function LoginScreen() {
   const isValidEmail = (email: string) =>
     /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
 
-  const handleLogin = () => {
+  const handleLogin = async () => {
     if (!email || !password) {
       Alert.alert("Missing Fields", "Please enter both email and password.");
       return;
     }
 
-    // TODO: call auth API
-    Alert.alert("Logging in", `Email: ${email}\nPassword: ${password}`, [
-      {
-        text: "OK",
-        onPress: () => {
-          router.replace("/(tabs)/home");
-        },
-      },
-    ]);
+    try {
+      await signInWithEmailAndPassword(auth, email, password);
+      router.replace("/(tabs)/home");
+    } catch (error: any) {
+      Alert.alert("Signup error", error.message);
+    }
   };
 
   return (

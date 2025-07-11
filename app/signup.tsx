@@ -1,4 +1,9 @@
-import { Link } from "expo-router";
+import { auth } from "@/FirebaseConfig";
+import { AntDesign, FontAwesome } from "@expo/vector-icons"; // For Google
+import Ionicons from "@expo/vector-icons/Ionicons";
+import { Link, useRouter } from "expo-router";
+import { createUserWithEmailAndPassword, updateProfile } from "firebase/auth";
+import { useState } from "react";
 import {
   Alert,
   Pressable,
@@ -8,11 +13,6 @@ import {
   View,
 } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
-import Ionicons from "@expo/vector-icons/Ionicons";
-import { AntDesign } from "@expo/vector-icons"; // For Google
-import { FontAwesome } from "@expo/vector-icons"; // For Apple
-import { useState } from "react";
-import { useRouter } from "expo-router";
 
 export default function SignupScreen() {
   const [name, setName] = useState("");
@@ -24,19 +24,27 @@ export default function SignupScreen() {
   const isValidEmail = (email: string) =>
     /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
 
-  const handleSignUp = () => {
+  const handleSignUp = async () => {
     if (!name || !email || !password) {
       Alert.alert("Missing Fields", "Please fill in all fields.");
       return;
     }
 
-    // TODO: call sign-up API
-    Alert.alert("Account Created", `Welcome, ${name}!`, [
-      {
-        text: "Continue",
-        onPress: () => router.replace("/(tabs)/home"),
-      },
-    ]);
+    try {
+      const userCredentials = await createUserWithEmailAndPassword(
+        auth,
+        email,
+        password
+      );
+
+      await updateProfile(userCredentials.user, {
+        displayName: name,
+      });
+
+      router.replace("/(tabs)/home");
+    } catch (error: any) {
+      Alert.alert("Signup error", error.message);
+    }
   };
 
   return (
